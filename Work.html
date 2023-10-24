@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+   <link rel="stylesheet" href="style.css">
+   <script>
+      let score = JSON.parse(localStorage.getItem('score')) || 
+{
+ Wins : 0,
+ Draw : 0,
+ Loss : 0
+}
+
+updatescore()
+
+//   Piece of Code above is tells us if score is null it hsould return to default if not nothing happens An easier version of code will displayes below in comment style
+
+
+//   if(score === null){
+//     score = {
+//         Wins : 0,
+//         Draws : 0,
+//         Loss : 0
+//     }
+//   }
+
+
+
+
+
+function playgame(playermove){
+const computermove = pickcomputermove();
+
+ let result = ''
+
+
+if(playermove === 'Rock'){
+ if(computermove === 'Rock'){
+        result = 'Its a Tie'
+    }else if(computermove === 'Paper'){
+        result = 'You Lose'
+    }else if(computermove === 'Scissors'){
+        result = 'You win'
+}
+} else if(playermove === 'Paper'){
+ if(computermove === 'Rock'){
+     result = 'You win'
+ }else if(computermove === 'Paper'){
+     result = 'Its a Tie'
+ }else if(computermove === 'Scissors'){
+     result = 'You Lose'
+ }
+} else if(playermove === 'Scissors'){
+ if(computermove === 'Rock'){
+     result = 'You Lose'
+ }else if(computermove === 'Paper'){
+     result = 'You win'
+ }else if(computermove === 'Scissors'){
+     result = 'Its a Tie'
+ }
+}
+
+
+if(result === 'You win'){
+ score.Wins += 1
+}else if(result === 'Its a Tie'){
+ score.Draw += 1
+}else if(result === 'You Lose'){
+ score.Loss += 1
+}
+
+localStorage.setItem('score',JSON.stringify(score))
+
+document.querySelector('.result').innerHTML = result
+
+document.querySelector('.move')
+  .innerHTML = ` You
+<img src="images/${playermove}-emoji.png" alt="" class="move-icon">
+<img src="images/${computermove}-emoji.png" alt="" class="move-icon">
+Computer`
+
+
+updatescore()
+
+
+ }
+
+
+
+
+      
+function pickcomputermove(){
+const Randomnumber = Math.random()
+
+
+let computermove = '';
+
+if(Randomnumber >= 0 && Randomnumber < 1/3 ){
+computermove = 'Rock'
+}else if(Randomnumber >= 1/3 && Randomnumber < 2/3){
+computermove = 'Paper'
+}else if(Randomnumber >= 2/3 && Randomnumber < 1){
+computermove = 'Scissors'
+}
+
+return computermove
+}
+
+function reset(){
+score.Wins = 0
+score.Draw = 0
+score.Loss = 0
+
+alert('Your score has been reset')
+}
+
+function updatescore(){
+ document.querySelector('.score')
+    .innerHTML = ` Wins: ${score.Wins}. Draw: ${score.Draw}. Losses: ${score.Loss}`
+}
+
+   </script>
+</head>
+<body>
+    <p class="title">Rock Paper Scissors</p>
+
+    <Button  onclick="
+        playgame('Rock') 
+      " class="move-button"><img src="images/rock-emoji.png" alt="" class="move-icon"></Button>
+    <Button onclick="
+      playgame('Paper')
+    " class="move-button"><img src="images/paper-emoji.png" alt="" class="move-icon"></Button>
+    <Button onclick="
+     playgame('Scissors')
+    " class="move-button"><img src="images/scissors-emoji.png" alt="" class="move-icon"></Button>
+
+
+    <p class="result"></p>
+    <p class="move"></p>
+    <p class="score"></p>
+
+    <Button onclick="
+        reset()
+        localStorage.removeItem('score')
+        updatescore()
+    " class="reset-score-button">Reset score</Button>
+</body>
+</html>
